@@ -8,7 +8,7 @@ with open(path.join(this_directory, 'README.md')) as f:
 setup(name='scyllabackup',
       version='0.1.0',
       description='Scyllabackup: A tool for taking scylla backups',
-      url='https://github.com/helpshift/scyllabackup',
+      url='https://github.com/drcabana/scyllabackup',
       long_description=long_description,
       long_description_content_type='text/markdown',
       license='MIT License',
