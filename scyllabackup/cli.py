@@ -193,10 +193,6 @@ def common_parser():
                                    "'s3' provider")
     s3.add('--s3-bucket-name', metavar='BUCKET_NAME',
            help='Mandatory if provider is s3')
-    s3.add('--s3-aws-key', metavar='AWS_KEY',
-           help='Mandatory if provider is s3')
-    s3.add('--s3-aws-secret', metavar='AWS_SECRET',
-           help='Mandatory if provider is s3')
     wabs = parser.add_argument_group("Required arguments if using "
                                      "'wabs' provider")
     wabs.add('--wabs-container-name', help='Mandatory if provider is wabs')
