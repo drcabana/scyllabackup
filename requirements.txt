@@ -1,3 +1,0 @@
---index-url https://pypi.python.org/simple/
-
--e https://github.com/drcabana/spongeblob.py.git#egg=spongeblob
