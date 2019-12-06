@@ -427,6 +427,16 @@ class Snapshot:
             finally:
                 self._delete_queue.task_done()
 
+    def is_view(self, keyspace_name, view_name):
+        cql = ("EXPAND ON; "
+               "SELECT view_name FROM system_schema.views "
+               "WHERE keyspace_name = '{0}';").format(keyspace_name)
+        cql_cmd = self.cqlsh.bake('--no-color', '-e', cql)
+        lines = [line for line in cql_cmd().splitlines() if line.startswith(' view_name | ')]
+        names = [line.split()[-1] for line in lines]
+        return view_name in names
+
+
     def find_new_table_path(self, keyspace_name, table_name):
         """This function returns the on-disk directory of a table where
         sstables are stored for scylladb given the keyspace and table name.
@@ -454,10 +464,17 @@ class Snapshot:
         :rtype: str
 
         """
-        cql = ("EXPAND ON; "
-               "SELECT id FROM system_schema.tables "
-               "WHERE keyspace_name = '{0}' "
-               "AND table_name= '{1}';").format(keyspace_name, table_name)
+
+        if self.is_view(keyspace_name, table_name):
+            cql = ("EXPAND ON; "
+                   "SELECT id FROM system_schema.views "
+                   "WHERE keyspace_name = '{0}' "
+                   "AND view_name= '{1}';").format(keyspace_name, table_name)
+        else:
+            cql = ("EXPAND ON; "
+                   "SELECT id FROM system_schema.tables "
+                   "WHERE keyspace_name = '{0}' "
+                   "AND table_name= '{1}';").format(keyspace_name, table_name)
         cql_cmd = self.cqlsh.bake('--no-color', '-e', cql)
         # Sample output of above command (ignore indentation, includes blank lines)
         # """
